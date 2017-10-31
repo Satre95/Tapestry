@@ -16,8 +16,7 @@ std::function< ci::vec3(ci::vec3)> Agent::defaultAdvanceFn = [](ci::vec3 oldPos)
 
 size_t Agent::agentsCount = 0;
 
-Agent::Agent(ci::vec3 pos, std::function<ci::vec3(ci::vec3&)>  advanceFn) : m_id(agentsCount++) {
-	m_position = pos; m_advanceFn = advanceFn;
+Agent::Agent(vec3 pos, std::function<vec3(vec3&)>  advanceFn) : m_id(agentsCount++), m_advanceFn(advanceFn), m_position(pos) {
 }
 
 Agent::~Agent() {

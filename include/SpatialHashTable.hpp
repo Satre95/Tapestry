@@ -3,7 +3,8 @@
 #include <unordered_map>
 #include <list>
 #include <sstream>
-#include <cinder/GeomIo.h>
+#include "cinder/GeomIo.h"
+#include "cinder/Log.h"
 
 template <class T>
 class SpatialHashTable
@@ -73,7 +74,7 @@ void SpatialHashTable<T>::Remove(glm::vec3 position) {
 	}
 
 	auto & items = bins.at(key);
-	items.remove_if([](std::pair<glm::vec3, T> & aPair) {
+	items.remove_if([&position](std::pair<glm::vec3, T> & aPair) {
 		return aPair.first == position;
 	});
 }

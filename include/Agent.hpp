@@ -22,7 +22,7 @@ private:
 	/// The history of points this agent has visited.
 	Trail m_trail;
 	/// The advancement fn used by this agent.
-	std::function<ci::vec3(ci::vec3)> m_advanceFn;
+	std::function<ci::vec3(ci::vec3&)> m_advanceFn;
 	const size_t m_id;
 	/// The default advancement algo, which randomly samples one of the six cardinal directions.
 	static std::function< ci::vec3(ci::vec3)> defaultAdvanceFn;

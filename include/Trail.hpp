@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <cinder/GeomIo.h>
+#include "cinder/GeomIo.h"
 
 class Trail
 {
