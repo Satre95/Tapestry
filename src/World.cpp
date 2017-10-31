@@ -7,18 +7,24 @@
 
 using namespace ci;
 
-World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims),
-m_history(0.5f, 500){
+World::World(float dims, size_t numAgents) : m_worldDimensions(dims),
+m_history(10.f, int(dims)/ 10){
 	m_agents.reserve(numAgents);
 	Rand rand;
 	for (size_t i = 0; i < numAgents; i++) {
 		vec3 pos(
-			rand.nextFloat(-dims.x / 2.f, dims.x / 2.f),
-			rand.nextFloat(-dims.y / 2.f, dims.y / 2.f),
-			rand.nextFloat(-dims.z / 2.f, dims.z / 2.f)
+			rand.nextFloat(-dims / 2.f, dims / 2.f),
+			rand.nextFloat(-dims / 2.f, dims / 2.f),
+			rand.nextFloat(-dims / 2.f, dims / 2.f)
 		);
 		m_agents.emplace_back(pos);
 	}
+    
+    //Populate history with initial positions
+    for(Agent & anAgent: m_agents) {
+        auto id = anAgent.Id();
+        m_history.Insert(anAgent.GetPosition(), id);
+    }
 }
 
 World::~World() {
@@ -45,8 +51,6 @@ void World::Update() {
 			aPoint.first
 		);
 	}
-
-	CI_LOG_I(std::to_string(newPositions.size()) + " new positions");
 }
 
 void World::Draw() {

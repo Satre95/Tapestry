@@ -15,6 +15,7 @@ public:
     void Draw() { m_trail.Draw(); }
 	size_t Id() const { return m_id; }
 	size_t TrailIndex() const { return m_trail.Size() - 1; }
+    ci::vec3 GetPosition() const { return m_position; }
 
 private:
 	/// This agent's current position in the World.
