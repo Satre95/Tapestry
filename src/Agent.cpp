@@ -30,6 +30,3 @@ vec3 Agent::Advance(const SpatialHashTable<size_t> & worldHistory) {
 
 	return m_position;
 }
-
-void Agent::Draw() {
-}
