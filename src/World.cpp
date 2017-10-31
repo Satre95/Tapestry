@@ -1,3 +1,6 @@
+#include <tuple>
+#include <vector>
+
 #include "World.hpp"
 #include <cinder/Rand.h>
 using namespace ci;
@@ -16,12 +19,27 @@ World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims) {
 }
 
 World::~World() {
-	m_buckets.Clear(); m_agents.clear();
+	m_history.Clear(); m_agents.clear();
 }
 
 void World::Update() {
+	std::vector<std::pair<size_t, vec3>> newPositions(NumAgents());
+
 	for (Agent & anAgent : m_agents) {
-		vec3 newAgentPos = anAgent.Advance(m_buckets);
+		newPositions.push_back(
+			std::make_pair(
+				anAgent.Id(),
+				anAgent.Advance(m_history)
+			)
+		);
+	}
+
+	//Now add the new positions to the world history
+	for (auto & aPoint : newPositions) {
+		m_history.Insert(
+			aPoint.second,
+			aPoint.first
+		);
 	}
 }
 

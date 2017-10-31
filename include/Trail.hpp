@@ -11,6 +11,7 @@ public:
 
 	void AddPoint(const ci::vec3 & point);
 	ci::vec3 GetPoint(size_t i) const;
+	size_t Size() const { return m_points.size(); }
 
 private:
 	std::vector <ci::vec3> m_points;

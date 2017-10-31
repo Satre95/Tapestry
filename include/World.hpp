@@ -19,7 +19,7 @@ private:
 	 * Stores the points that have been added to the world so far.
 	 * First number is agent index, second is the index of the point in that agent's trail.
 	 */
-	SpatialHashTable<std::pair<size_t, size_t>> m_buckets;
+	SpatialHashTable<size_t> m_history;
 	std::vector<Agent> m_agents;
 	ci::vec3 m_worldDimensions;
 };
