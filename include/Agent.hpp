@@ -14,8 +14,13 @@ public:
 	ci::vec3 Advance(const SpatialHashTable<std::pair<size_t, size_t>> & trails);
 	void Draw();
 private:
+	/// This agent's current position in the World.
 	ci::vec3 m_position;
+	/// The history of points this agent has visited.
 	Trail m_trail;
+	/// The advancement fn used by this agent.
+	std::function<ci::vec3(ci::vec3)> m_advanceFn;
+
 	/// The default advancement algo, which randomly samples one of the six cardinal directions.
 	static std::function< ci::vec3(ci::vec3)> defaultAdvanceFn;
 };
