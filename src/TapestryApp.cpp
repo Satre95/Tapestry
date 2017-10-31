@@ -25,6 +25,7 @@ TapestryApp::TapestryApp() : App(), m_world(vec3(50)) {
 
 void TapestryApp::setup()
 {
+    
 }
 
 void TapestryApp::mouseDown(MouseEvent event)

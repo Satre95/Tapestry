@@ -11,7 +11,7 @@ class SpatialHashTable
 {
 public:
 	SpatialHashTable();
-	SpatialHashTable(int m_binSize, int m_numBins);
+	SpatialHashTable(float m_binSize, int m_numBins);
 
 	/// Copies the item with the given position into this container.
 	void Insert(glm::vec3 position, T & value);
@@ -28,7 +28,7 @@ private:
 	typedef long HashKey;
 	HashKey HashPosition(glm::vec3 position) const;
 
-	const int m_binSize;
+	const float m_binSize;
 	const int m_numBins;
 	std::unordered_map<HashKey, std::list < std::pair<glm::vec3, T >>> bins;
 	const std::array<long, 3> PRIMES{ 73856093, 19349663, 83492791 };
@@ -38,7 +38,7 @@ template<class T>
 SpatialHashTable<T>::SpatialHashTable() : m_binSize(5), m_numBins(500) {}
 
 template<class T>
-SpatialHashTable<T>::SpatialHashTable(int binSize, int numBins) :
+SpatialHashTable<T>::SpatialHashTable(float binSize, int numBins) :
 	m_binSize(binSize), m_numBins(numBins) {}
 
 template<class T>
@@ -81,9 +81,9 @@ void SpatialHashTable<T>::Remove(glm::vec3 position) {
 
 template<class T>
 long SpatialHashTable<T>::HashPosition(glm::vec3 position) const {
-	HashKey part1 = long(std::floor(position.x / float(m_binSize))) * PRIMES.at(0);
-	HashKey part2 = long(std::floor(position.y / float(m_binSize))) * PRIMES.at(1);
-	HashKey part3 = long(std::floor(position.z / float(m_binSize))) * PRIMES.at(2);
+	HashKey part1 = long(std::floor(position.x / m_binSize)) * PRIMES.at(0);
+	HashKey part2 = long(std::floor(position.y / m_binSize)) * PRIMES.at(1);
+	HashKey part3 = long(std::floor(position.z / m_binSize)) * PRIMES.at(2);
 
 	return (part1 ^ part2 ^ part3) % m_numBins;
 }

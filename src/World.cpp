@@ -7,7 +7,8 @@
 
 using namespace ci;
 
-World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims) {
+World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims),
+m_history(0.5f, 500){
 	m_agents.reserve(numAgents);
 	Rand rand;
 	for (size_t i = 0; i < numAgents; i++) {
