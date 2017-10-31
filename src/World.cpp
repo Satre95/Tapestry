@@ -2,7 +2,9 @@
 #include <vector>
 
 #include "World.hpp"
-#include <cinder/Rand.h>
+#include "cinder/Rand.h"
+#include "cinder/Log.h"
+
 using namespace ci;
 
 World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims) {
@@ -23,7 +25,8 @@ World::~World() {
 }
 
 void World::Update() {
-	std::vector<std::pair<size_t, vec3>> newPositions(NumAgents());
+	std::vector<std::pair<size_t, vec3>> newPositions;
+	newPositions.reserve(NumAgents());
 
 	for (Agent & anAgent : m_agents) {
 		newPositions.push_back(
@@ -41,6 +44,8 @@ void World::Update() {
 			aPoint.first
 		);
 	}
+
+	CI_LOG_I(std::to_string(newPositions.size()) + " new positions");
 }
 
 void World::Draw() {

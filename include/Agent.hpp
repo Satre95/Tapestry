@@ -11,7 +11,7 @@ public:
 	Agent(ci::vec3 pos, std::function<ci::vec3(ci::vec3&)>  advanceFn = defaultAdvanceFn);
 	~Agent();
 
-	ci::vec3 Advance(const SpatialHashTable<size_t> & trails);
+	ci::vec3 Advance(const SpatialHashTable<size_t> & history);
 	void Draw();
 	size_t Id() const { return m_id; }
 	size_t TrailIndex() const { return m_trail.Size() - 1; }

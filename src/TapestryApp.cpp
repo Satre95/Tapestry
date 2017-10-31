@@ -11,13 +11,17 @@ using namespace std;
 
 class TapestryApp : public App {
 public:
+	TapestryApp();
 	void setup() override;
 	void mouseDown(MouseEvent event) override;
 	void update() override;
 	void draw() override;
 
-	World * world;
+	World m_world;
 };
+
+TapestryApp::TapestryApp() : App(), m_world(vec3(50)) {
+}
 
 void TapestryApp::setup()
 {
@@ -29,6 +33,7 @@ void TapestryApp::mouseDown(MouseEvent event)
 
 void TapestryApp::update()
 {
+	m_world.Update();
 }
 
 void TapestryApp::draw()
