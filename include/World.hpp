@@ -3,7 +3,6 @@
 #include <cinder/GeomIo.h>
 #include "SpatialHashTable.hpp"
 #include "Agent.hpp"
-
 class World
 {
 public:
@@ -12,8 +11,15 @@ public:
 
 	size_t NumAgents() const { return m_agents.size(); }
 
+	void Update();
+	void Draw();
+
 private:
-	SpatialHashTable<size_t> m_buckets;
+	/**
+	 * Stores the points that have been added to the world so far.
+	 * First number is agent index, second is the index of the point in that agent's trail.
+	 */
+	SpatialHashTable<std::pair<size_t, size_t>> m_buckets;
 	std::vector<Agent> m_agents;
 	ci::vec3 m_worldDimensions;
 };

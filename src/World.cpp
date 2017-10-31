@@ -2,8 +2,7 @@
 #include <cinder/Rand.h>
 using namespace ci;
 
-World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims)
-{
+World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims) {
 	m_agents.reserve(numAgents);
 	Rand rand;
 	for (size_t i = 0; i < numAgents; i++) {
@@ -16,7 +15,16 @@ World::World(vec3 dims, size_t numAgents) : m_worldDimensions(dims)
 	}
 }
 
-World::~World()
-{
+World::~World() {
 	m_buckets.Clear(); m_agents.clear();
+}
+
+void World::Update() {
+	for (Agent & anAgent : m_agents) {
+		vec3 newAgentPos = anAgent.Advance(m_buckets);
+	}
+}
+
+void World::Draw() {
+	for (Agent & anAgent : m_agents) anAgent.Draw();
 }
