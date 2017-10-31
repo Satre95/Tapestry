@@ -12,19 +12,25 @@ public:
 	SpatialHashTable();
 	SpatialHashTable(int m_binSize, int m_numBins);
 
+	/// Copies the item with the given position into this container.
 	void Insert(glm::vec3 position, T & value);
+	///Removes the item with the given position from the table, if it exists.
 	void Remove(glm::vec3 position);
+	/// Resets and erases all data in this container.
 	void Clear();
+	/// Finds an element with the given position, if it exists.
+	T * Find(glm::vec3 position) const;
+	/// Returns the number of items in the same bin of the given position.
+	size_t Probe(glm::vec3 position) const;
 
-	void TestHash();
 private:
 	typedef long HashKey;
-	HashKey HashPosition(glm::vec3 position);
+	HashKey HashPosition(glm::vec3 position) const;
 
 	const int m_binSize;
 	const int m_numBins;
-	std::unordered_map<long, std::list<T>> bins;
-	const std::array<float, 3> PRIMES{ 73856093.f, 19349663.f, 83492791.f };
+	std::unordered_map<HashKey, std::list < std::pair<glm::vec3, T >>> bins;
+	const std::array<long, 3> PRIMES{ 73856093, 19349663, 83492791 };
 };
 
 template<class T>
@@ -41,11 +47,15 @@ void SpatialHashTable<T>::Insert(glm::vec3 position, T & value) {
 
 	//if the bin that this position hashes to has not been used before, need to create it first.
 	if (bins.find(key) == bins.end())
-		bins.insert(std::make_pair(key, std::list<T>()));
+		bins.insert(std::make_pair(key, std::list < std::pair<glm::vec3, T>>()));
 
 	//Insert into the list at the given key
-	std::list<T> & list = bins.at(key);
-	list.push_back(value);
+	auto & list = bins.at(key);
+	//Duplicate check
+	for (auto & aPair : list)
+		if (aPair.first == position) return;
+
+	list.push_back(std::make_pair(position, value));
 }
 
 template <class T>
@@ -62,29 +72,52 @@ void SpatialHashTable<T>::Remove(glm::vec3 position) {
 		return;
 	}
 
-	std::list<T> & items = bins.at(key);
-	items.Remove(position);
+	auto & items = bins.at(key);
+	items.remove_if([](std::pair<glm::vec3, T> & aPair) {
+		return aPair.first == position;
+	});
 }
 
 template<class T>
-long SpatialHashTable<T>::HashPosition(glm::vec3 position) {
-	HashKey part1 = std::floor(position.x / m_binSize) * PRIMES.at(0);
-	HashKey part2 = std::floor(position.y / m_binSize) * PRIMES.at(1);
-	HashKey part3 = std::floor(position.z / m_binSize) * PRIMES.at(2);
+long SpatialHashTable<T>::HashPosition(glm::vec3 position) const {
+	HashKey part1 = long(std::floor(position.x / float(m_binSize))) * PRIMES.at(0);
+	HashKey part2 = long(std::floor(position.y / float(m_binSize))) * PRIMES.at(1);
+	HashKey part3 = long(std::floor(position.z / float(m_binSize))) * PRIMES.at(2);
 
 	return (part1 ^ part2 ^ part3) % m_numBins;
-}
-
-template<class T>
-void SpatialHashTable<T>::TestHash() {
-	for (size_t i = 0; i < 12; i++)
-	{
-		glm::vec3 randPos(ofRandom(100), ofRandom(100), ofRandom(100));
-		ofLogNotice() << "Position: " << randpos << " hashed to key: " << HashPosition;
-	}
 }
 
 template <class T>
 void SpatialHashTable<T>::Clear() {
 	bins.clear();
+}
+
+template <class T>
+T * SpatialHashTable<T>::Find(glm::vec3 position) const {
+	//Get the hash key for the given position
+	HashKey key = HashPosition(position);
+
+	//if the bin that this position hashes to has not been created, then item doesn't exist.
+	if (bins.find(key) == bins.end()) return nullptr;
+
+	// Find list at the given key
+	auto & list = bins.at(key);
+	/// Find the item.
+	for (auto & aPair : list) {
+		if (aPair.first == position) {
+			return &aPair.second;
+		}
+	}
+
+	return nullptr;
+}
+
+template <class T>
+size_t SpatialHashTable<T>::Probe(glm::vec3 position) const {
+	//Get the hash key for the given position
+	HashKey key = HashPosition(position);
+
+	//if the bin that this position hashes to has not been created, then item doesn't exist.
+	if (bins.find(key) == bins.end()) return 0;
+	return bins.at(key).size();
 }
