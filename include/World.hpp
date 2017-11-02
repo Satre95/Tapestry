@@ -6,7 +6,7 @@
 class World
 {
 public:
-	World(float dimensions, size_t numAgents = 10);
+	World(float dimensions, float binSize, size_t numAgents = 10);
 	~World();
 
 	size_t NumAgents() const { return m_agents.size(); }

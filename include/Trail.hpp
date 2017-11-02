@@ -13,7 +13,7 @@ public:
 	void AddPoint(const ci::vec3 & point);
 	ci::vec3 GetPoint(size_t i) const;
 	size_t Size() const { return m_path.size(); }
-    void Draw();
+    void Draw(ci::Color color);
 private:
     /// The line to draw
     ci::PolyLine3 m_path;

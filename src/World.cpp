@@ -1,23 +1,24 @@
 #include <tuple>
 #include <vector>
-
+#include "glm/ext.hpp"
 #include "World.hpp"
 #include "cinder/Rand.h"
 #include "cinder/Log.h"
 
 using namespace ci;
+using namespace cinder;
 
-World::World(float dims, size_t numAgents) : m_worldDimensions(dims),
-m_history(10.f, int(dims)/ 10){
+World::World(float dims, float binSize, size_t numAgents ) : m_worldDimensions(dims), m_history(binSize, int(dims) / int(std::round(binSize))) {
 	m_agents.reserve(numAgents);
-	Rand rand;
 	for (size_t i = 0; i < numAgents; i++) {
 		vec3 pos(
-			rand.nextFloat(-dims / 2.f, dims / 2.f),
-			rand.nextFloat(-dims / 2.f, dims / 2.f),
-			rand.nextFloat(-dims / 2.f, dims / 2.f)
+                 randFloat(-dims / 2.f, dims / 2.f),
+                 randFloat(-dims / 2.f, dims / 2.f),
+                 randFloat(-dims / 2.f, dims / 2.f)
 		);
+        pos = glm::round(pos) + 0.5f; //Points are always in middle of cells
 		m_agents.emplace_back(pos);
+        m_agents.back().SetColor(Color(randFloat(), randFloat(), randFloat()));
 	}
     
     //Populate history with initial positions

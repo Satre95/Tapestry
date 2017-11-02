@@ -18,6 +18,7 @@ ci::vec3 Trail::GetPoint(size_t i) const {
     return m_path.getPoints().at(i);
 }
 
-void Trail::Draw() {
+void Trail::Draw(Color color) {
+    gl::color(color);
     ci::gl::draw(m_path);
 }
