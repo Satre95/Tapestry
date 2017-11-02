@@ -26,8 +26,7 @@ public:
 
 	World m_world;
     CameraPersp m_camera;
-    Arcball m_arcball;
-    Sphere m_sphere;
+    CameraUi m_cameraUI;
 };
 
 TapestryApp::TapestryApp() : App(), m_world(500) {
@@ -35,10 +34,9 @@ TapestryApp::TapestryApp() : App(), m_world(500) {
 
 void TapestryApp::setup()
 {
-    m_camera.setPerspective( 45.0f, getWindowAspectRatio(), 0.1f, 1000.0f );
+    m_camera.setPerspective( 60.0f, getWindowAspectRatio(), 0.1f, 1000.0f );
     m_camera.lookAt( vec3( 0, 0, 3 ), vec3( 0 ) );
-    m_sphere = Sphere( vec3( 0 ), 10.f );
-    m_arcball = Arcball( &m_camera, m_sphere );
+    m_cameraUI = CameraUi(&m_camera);
 
     gl::enableDepthRead();
     gl::enableDepthWrite();
@@ -51,11 +49,14 @@ void TapestryApp::resize() {
 
 void TapestryApp::mouseDown(MouseEvent event)
 {
-    m_arcball.mouseDown(event);
+    m_cameraUI.mouseDown(event);
 }
 
 void TapestryApp::mouseDrag(cinder::app::MouseEvent event) {
-    m_arcball.mouseDrag(event);
+    Rectf r    = Rectf( getWindowWidth() / 2, 0, getWindowWidth(), getWindowHeight() );
+    if ( r.contains( event.getPos() )) {
+        m_cameraUI.mouseDrag( event );
+    }
 }
 
 void TapestryApp::update()
@@ -69,8 +70,6 @@ void TapestryApp::draw()
 //    gl::clear(Color(0.f, 0.f, 0.f));
 
     gl::setMatrices( m_camera );
-//    gl::rotate( m_arcball.getQuat() );
-    gl::viewport( getWindowWidth() / 2, 0.0f, getWindowWidth() / 2, getWindowHeight() );
     m_world.Draw();
 }
 
