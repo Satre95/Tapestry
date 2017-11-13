@@ -56,10 +56,7 @@ void TapestryApp::mouseWheel(MouseEvent event) {
 }
 
 void TapestryApp::mouseDrag(cinder::app::MouseEvent event) {
-    Rectf r    = Rectf( getWindowWidth() / 2, 0, getWindowWidth(), getWindowHeight() );
-    if ( r.contains( event.getPos() )) {
-        m_cameraUI.mouseDrag( event );
-    }
+    m_cameraUI.mouseDrag( event );
 }
 
 void TapestryApp::update()

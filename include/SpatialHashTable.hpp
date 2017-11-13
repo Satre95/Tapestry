@@ -54,7 +54,7 @@ void SpatialHashTable<T>::Insert(glm::vec3 position, T & value) {
 	auto & list = bins.at(key);
 	//Duplicate check
 	for (auto & aPair : list)
-		if (aPair.first == position) return;
+        if (aPair.first == position) return;
 
 	list.push_back(std::make_pair(position, value));
 }
