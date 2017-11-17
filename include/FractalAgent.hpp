@@ -12,7 +12,7 @@
 class FractalAgent
 {
 public:
-	FractalAgent(std::string axiom, ci::Color col = ci::Color::gray);
+	FractalAgent(std::string axiom, ci::Color col = ci::Color::white());
 	~FractalAgent();
 
 	/// Run 1 recursion step of the sequence. Restarts the draw sequence.
@@ -25,10 +25,15 @@ public:
 	void Draw();
 	void AddRule(char c, std::string rule);
 	void AddAction(char c, const std::function < std::pair<glm::vec3, glm::vec3>(glm::vec3, glm::vec3)> &);
+	std::string GetProduction() const { return m_production; }
+	void SetHeading(glm::vec3 newHeading) { m_heading = newHeading; }
+
+	static float stepSize;
 
 private:
 
 	glm::vec3 m_position;
+	/// Direction the turtle is facing. Should always be normalized.
 	glm::vec3 m_heading;
 	/// Location of the next symbol that needs to be processed.
 	size_t m_nextSymbolIndex = 0;

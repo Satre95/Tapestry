@@ -1,8 +1,13 @@
 #include "FractalAgent.hpp"
-
+#include "cinder/Log.h"
+#include "cinder/gl/gl.h"
 using namespace std;
 
-FractalAgent::FractalAgent(string axiom, ci::Color colorIn) : m_axiom(axiom), m_color(colorIn) {
+float FractalAgent::stepSize = 5.f;
+
+FractalAgent::FractalAgent(string axiom, ci::Color colorIn) :
+	m_axiom(axiom), m_color(colorIn), m_heading(1.f, 0, 0) {
+	m_production = m_axiom;
 }
 
 FractalAgent::~FractalAgent() {
@@ -26,8 +31,9 @@ void FractalAgent::Advance() {
 	if (m_nextSymbolIndex >= m_production.size()) return;
 
 	const char & symbol = m_production.at(m_nextSymbolIndex++);
-	auto & action = m_actions.at(symbol);
-	auto newPosAndHeading = action(m_position, m_heading);
+	auto actionItr = m_actions.find(symbol);
+	if (actionItr == m_actions.end()) return; // No advancement for this symbol
+	auto newPosAndHeading = actionItr->second(m_position, m_heading);
 	m_trail.AddPoint(m_position);
 	m_position = newPosAndHeading.first;
 	m_heading = newPosAndHeading.second;
@@ -38,7 +44,10 @@ void FractalAgent::AdvanceAll() {
 		Advance();
 }
 
-void FractalAgent::Draw() { m_trail.Draw(m_color); }
+void FractalAgent::Draw() {
+	ci::gl::drawSphere(m_position, 1.f);
+	m_trail.Draw(m_color);
+}
 
 void FractalAgent::AddRule(char c, string rule) {
 	m_ruleSet.insert(make_pair(c, rule));
