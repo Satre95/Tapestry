@@ -3,6 +3,7 @@
 #include "cinder/GeomIo.h"
 #include "SpatialHashTable.hpp"
 #include "Agent.hpp"
+#include "FractalAgent.hpp"
 class World
 {
 public:
